@@ -2,9 +2,14 @@
 
 Soundcloud downloader
 
+### Install
+```sh
+npm install sndcld-dwldr -g
+```
+
 ### Run
 ```sh
-./index.js "token" "file"
+sndcld-dwldr "token" "file"
 
-./index.js "token" "playlist" playlist
+sndcld-dwldr "token" "playlist" playlist
 ```

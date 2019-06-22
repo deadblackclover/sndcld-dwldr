@@ -6,10 +6,15 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "bin": {
+    "sndcld-dwldr": "index.js"
+  },
   "keywords": [
     "soundcloud",
     "downloader"
   ],
+  "homepage": "https://gitlab.com/deadblackclover/sndcld-dwldr",
+  "bugs": "https://gitlab.com/deadblackclover/sndcld-dwldr/issues",
   "author": "DEADBLACKCLOVER <deadblackclover@protonmail.com>",
   "license": "GPL-3.0",
   "dependencies": {

@@ -84,7 +84,7 @@ async function downloader(url) {
     namemp3 = namemp3.split("/").join("_");
     namemp3 = namemp3.split(" ").join("_");
 
-    let file = fs.createWriteStream(namemp3);
+    let file = fs.createWriteStream("downloads/" + namemp3);
 
     await new Promise((resolve, reject) => {
         let stream = request({
