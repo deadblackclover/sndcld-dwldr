@@ -2,10 +2,12 @@
 
 var request2 = require('sync-request');
 const https = require('https');
+const request = require('request');
 const fs = require('fs');
 
 arg1 = process.argv[2] || "";
 arg2 = process.argv[3] || "";
+arg3 = process.argv[4] || "";
 
 var config = {};
 config.soundcloud = {
@@ -27,8 +29,13 @@ if (arg1 === "-h" || arg1 === "--help") {
 
     if(matchToken !== null && matchToken[0] !== "" && matchURL !== null && matchURL[0] !== "") {
         var url = arg2;
-        // downloader(url);
-        downloaderPlaylist(url);
+
+        if (arg3 !== "" && arg3 == "playlist") {
+            downloaderPlaylist(url);
+        } else {
+            downloader(url);
+        }
+        
     } else {
         console.log("Error: invalid parameters");
         console.log("Help: index.js -h")
@@ -38,7 +45,7 @@ if (arg1 === "-h" || arg1 === "--help") {
     console.log("Help: index.js -h")
 }
 
-function downloader(url) {
+async function downloader(url) {
 
     let resolve = config.soundcloud.href +
         'resolve.json?url=' + encodeURIComponent(url) +
@@ -74,13 +81,35 @@ function downloader(url) {
 
     let mp3 = json.http_mp3_128_url;
 
+    namemp3 = namemp3.split("/").join("_");
+    namemp3 = namemp3.split(" ").join("_");
+
     let file = fs.createWriteStream(namemp3);
-    let request = https.get(mp3, function(response) {
-        response.pipe(file);
+
+    await new Promise((resolve, reject) => {
+        let stream = request({
+            uri: mp3,
+        })
+        .pipe(file)
+        .on('finish', () => {
+            console.log("Successful download!");
+            console.log(namemp3);
+            resolve();
+        })
+        .on('error', (error) => {
+            reject(error);
+        })
+    })
+    .catch(error => {
+        console.log(`Something happened: ${error}`);
     });
 
-    console.log("Successful download!");
-    console.log(namemp3);
+    // let request = https.get(mp3, function(response) {
+    //     response.pipe(file);
+    // });
+
+    // console.log("Successful download!");
+    // console.log(namemp3);
 }
 
 function downloaderPlaylist(url) {
